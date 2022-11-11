@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="VkNet" Version="1.72.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DTLib\DTLib.Dtsod\DTLib.Dtsod.csproj" />
+      <ProjectReference Include="..\DTLib\DTLib\DTLib.csproj" />
+    </ItemGroup>
+
+</Project>

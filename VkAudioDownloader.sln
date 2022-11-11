@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VkAudioDownloader", "VkAudioDownloader\VkAudioDownloader.csproj", "{5F117DA9-78F4-4362-AD98-0231B81511E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VkAudioDownloader.CLI", "VkAudioDownloader.CLI\VkAudioDownloader.CLI.csproj", "{5ECC83C5-B53F-4CA7-ABDE-E2ACE8F48FED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTLib", "DTLib\DTLib\DTLib.csproj", "{5A02279F-F246-4101-BAA7-71EC5FAF2CAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTLib.Dtsod", "DTLib\DTLib.Dtsod\DTLib.Dtsod.csproj", "{F6FA6507-8A20-43F8-9D88-4CB2F049780D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5F117DA9-78F4-4362-AD98-0231B81511E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F117DA9-78F4-4362-AD98-0231B81511E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F117DA9-78F4-4362-AD98-0231B81511E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F117DA9-78F4-4362-AD98-0231B81511E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5ECC83C5-B53F-4CA7-ABDE-E2ACE8F48FED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5ECC83C5-B53F-4CA7-ABDE-E2ACE8F48FED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5ECC83C5-B53F-4CA7-ABDE-E2ACE8F48FED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5ECC83C5-B53F-4CA7-ABDE-E2ACE8F48FED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A02279F-F246-4101-BAA7-71EC5FAF2CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A02279F-F246-4101-BAA7-71EC5FAF2CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A02279F-F246-4101-BAA7-71EC5FAF2CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A02279F-F246-4101-BAA7-71EC5FAF2CAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6FA6507-8A20-43F8-9D88-4CB2F049780D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6FA6507-8A20-43F8-9D88-4CB2F049780D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6FA6507-8A20-43F8-9D88-4CB2F049780D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6FA6507-8A20-43F8-9D88-4CB2F049780D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
