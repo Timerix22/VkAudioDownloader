@@ -1,3 +1,9 @@
 [submodule "DTLib"]
 	path = DTLib
 	url = https://github.com/Timerix22/DTLib.git
+[submodule "vknet"]
+	path = vknet
+	url = https://github.com/Timerix22/vknet
+[submodule "VkNet.AudioBypass"]
+	path = VkNet.AudioBypass
+	url = https://github.com/Timerix22/VkNet.AudioBypass

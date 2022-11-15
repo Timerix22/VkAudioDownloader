@@ -2,17 +2,18 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
+        <LangVersion>10</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="VkNet" Version="1.72.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\DTLib\DTLib.Dtsod\DTLib.Dtsod.csproj" />
-      <ProjectReference Include="..\DTLib\DTLib\DTLib.csproj" />
+        <ProjectReference Include="..\DTLib\DTLib.Dtsod\DTLib.Dtsod.csproj" />
+        <ProjectReference Include="..\DTLib\DTLib\DTLib.csproj" />
+        <ProjectReference Include="..\VkNet.AudioBypass\VkNet.AudioBypassService\VkNet.AudioBypassService.csproj" />
+        <!--ProjectReference Include="..\vknet\VkNet.Generators\VkNet.Generators.csproj" />
+        <ProjectReference Include="..\vknet\VkNet\VkNet.csproj" /!-->
+        <PackageReference Include="VkNet" Version="1.72.0" />
     </ItemGroup>
 
 </Project>
