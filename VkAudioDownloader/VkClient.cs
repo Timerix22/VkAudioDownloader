@@ -1,6 +1,6 @@
-﻿global using DTLib;
-global using DTLib.Extensions;
-using DTLib.Logging;
+﻿using System;
+using System.IO;
+using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using VkNet;
@@ -9,8 +9,10 @@ using VkNet.Model;
 using VkNet.Model.RequestParams;
 using VkNet.Utils;
 using VkNet.Model.Attachments;
-using VkNet.AudioBypassService;
 using VkNet.AudioBypassService.Extensions;
+using DTLib.Logging.DependencyInjection;
+using DTLib.Logging.New;
+using ILogger = DTLib.Logging.New.ILogger;
 
 namespace VkAudioDownloader;
 
@@ -20,15 +22,16 @@ public class VkClient : IDisposable
 {
     public VkApi Api;
     public VkClientConfig Config;
-    
-    public VkClient(VkClientConfig conf)
+    private ILogger _logger;
+
+    public VkClient(VkClientConfig conf, ILogger logger)
     {
         Config = conf;
-        var services = new ServiceCollection();
-        //services.AddSingleton<LoggerService>();
-        services.AddAudioBypass();
+        _logger = logger;
+        var services = new ServiceCollection()
+            .Add(new LoggerService<VkApi>(logger))
+            .AddAudioBypass();
         Api = new VkApi(services);
-        
     }
 
     public void Connect()
@@ -40,12 +43,12 @@ public class VkClient : IDisposable
         };
         if (Config.Token is not null)
         {
-            Console.WriteLine("authorizing by token");
+            _logger.Log(nameof(VkClient),LogSeverity.Info,"authorizing by token");
             authParams.AccessToken = Config.Token;
         }
         else
         {
-            Console.WriteLine("authorizing by login and password");
+            _logger.Log(nameof(VkClient),LogSeverity.Info,"authorizing by login and password");
             authParams.Login = Config.Login;
             authParams.Password = Config.Password;
         }

@@ -3,12 +3,14 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <LangVersion>10</LangVersion>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\DTLib\DTLib.Dtsod\DTLib.Dtsod.csproj" />
+        <ProjectReference Include="..\DTLib\DTLib.Logging\DTLib.Logging.csproj" />
         <ProjectReference Include="..\DTLib\DTLib\DTLib.csproj" />
         <ProjectReference Include="..\VkNet.AudioBypass\VkNet.AudioBypassService\VkNet.AudioBypassService.csproj" />
         <ProjectReference Include="..\vknet\VkNet.Generators\VkNet.Generators.csproj" />
