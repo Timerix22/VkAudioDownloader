@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sulution_items", "sulution_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTLib.Logging", "DTLib\DTLib.Logging\DTLib.Logging.csproj", "{A087B535-371A-4A7E-883E-B5B290567E9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ben.Demystifier", "DTLib\DTLib.Logging\Ben.Demystifier\src\Ben.Demystifier\Ben.Demystifier.csproj", "{42AEDE44-8CE6-4561-B83E-AAE715B9C1DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,5 +62,9 @@ Global
 		{A087B535-371A-4A7E-883E-B5B290567E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A087B535-371A-4A7E-883E-B5B290567E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A087B535-371A-4A7E-883E-B5B290567E9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42AEDE44-8CE6-4561-B83E-AAE715B9C1DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42AEDE44-8CE6-4561-B83E-AAE715B9C1DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42AEDE44-8CE6-4561-B83E-AAE715B9C1DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42AEDE44-8CE6-4561-B83E-AAE715B9C1DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
