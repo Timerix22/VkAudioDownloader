@@ -1,20 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace VkAudioDownloader.VkM3U8;
 
 public class M3U8Parser
 {
-    private string _m3u8="";
+    #nullable disable
+    private string _m3u8;
     private int _pos;
     private List<HLSFragment> _fragments = new();
-    private int _playlistDuration = 0;
-    private HLSFragment _currentFragment = default;
+    private string _baseUrl;
+    private float _playlistDuration;
+    private string _fragmentName;
+    private float _fragmentDuration;
+    private string _fragmentEncryptionKeyUrl;
+    private bool _fragmentEncrypted;
     
     // parses m3u8 playlist and resets state
     public HLSPlaylist Parse(Uri m3u8Url, string m3u8Content)
     {
         _m3u8 = m3u8Content;
+        var urlStr = m3u8Url.ToString();
+        _baseUrl = urlStr.Remove(urlStr.LastIndexOf('/') + 1);
+        
         var line = NextLine();
         while (!line.IsEmpty)
         {
@@ -22,19 +31,28 @@ public class M3U8Parser
                 ParseHashTag(line);
             else
             {
-                _currentFragment.Name = line.ToString();
-                _fragments.Add(_currentFragment);
-                _currentFragment = default;
+                _fragmentName = line.ToString();
+                _fragments.Add(new HLSFragment(
+                    _fragmentName, 
+                    _baseUrl+_fragmentName,
+                    _fragmentDuration,
+                    _fragmentEncrypted, 
+                    _fragmentEncryptionKeyUrl));
+                _playlistDuration += _fragmentDuration;
+                // m3u8 format uses hashtags to replace some properties, so there is no need to reset them after every fragment name
+                // _fragmentName = null;
+                // _fragmentDuration = 0;
+                // _fragmentEncrypted = false;
+                // _fragmentEncryptionKeyUrl = null;
             }
                 
             line = NextLine();
         }
 
-        string urlStr = m3u8Url.ToString();
         var rezult = new HLSPlaylist(
             _fragments.ToArray(),
             _playlistDuration,
-            urlStr.Remove(urlStr.LastIndexOf('/')+1));
+            _baseUrl);
         Clear();
         return rezult;
     }
@@ -56,15 +74,18 @@ public class M3U8Parser
 
     private void ParseHashTag(ReadOnlySpan<char> line)
     {
-        if(line.StartsWith("EXT-X-TARGETDURATION:"))
-            _playlistDuration=Int32.Parse(line.After(':'));
+        if(line.StartsWith("#EXTINF:"))
+        {
+            var duration = line.After(':').Before(',');
+            _fragmentDuration = float.Parse(duration, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat);
+        }
         else if (line.StartsWith("#EXT-X-KEY:METHOD="))
         {
             var method = line.After("#EXT-X-KEY:METHOD=");
             
             if (method.ToString() == "NONE")
             {
-                _currentFragment.Encrypted = false;
+                _fragmentEncrypted = false;
                 return;
             }
 
@@ -76,18 +97,21 @@ public class M3U8Parser
             if (!keyUrl.StartsWith("http"))
                 throw new Exception($"key uri is not url: {keyUrl}");
             
-            // AES-128 which AudioDecryptor can decrypt
-            _currentFragment.Encrypted = true;
-            _currentFragment.EncryptionKeyUrl = keyUrl.ToString();
+            // AES-128 which AudioAesDecryptor can decrypt
+            _fragmentEncrypted = true;
+            _fragmentEncryptionKeyUrl = keyUrl.ToString();
         }
     }
 
     private void Clear()
     {
-        _m3u8 = "";
+        _baseUrl = null;
+        _m3u8 = null;
         _pos=0;
-        _fragments.Clear();
-        _currentFragment = default;
         _playlistDuration = 0;
+        _fragments.Clear();
+        _fragmentName = null;
+        _fragmentEncrypted = false;
+        _fragmentEncryptionKeyUrl = null;
     }
 }
