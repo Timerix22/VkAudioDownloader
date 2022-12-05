@@ -103,7 +103,7 @@ public class VkClient : IDisposable
         string[] opusFragments = await _ffmpeg.ToOpus(fragmentDir);
         string listFile = _ffmpeg.CreateFragmentList(fragmentDir, opusFragments);
         await _ffmpeg.Concat(outFile, listFile);
-        // Directory.Delete(fragmentDir);
+        Directory.Delete(fragmentDir);
         
         return outFile;
     }

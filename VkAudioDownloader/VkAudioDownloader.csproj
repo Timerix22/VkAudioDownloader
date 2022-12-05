@@ -12,13 +12,12 @@
         <ProjectReference Include="..\DTLib\DTLib.Dtsod\DTLib.Dtsod.csproj" />
         <ProjectReference Include="..\DTLib\DTLib.Logging\DTLib.Logging.csproj" />
         <ProjectReference Include="..\DTLib\DTLib\DTLib.csproj" />
-        <ProjectReference Include="..\VkNet.AudioBypass\VkNet.AudioBypassService\VkNet.AudioBypassService.csproj" />
-        <ProjectReference Include="..\vknet\VkNet.Generators\VkNet.Generators.csproj" />
-        <ProjectReference Include="..\vknet\VkNet\VkNet.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="CliWrap" Version="3.5.0" />
+      <PackageReference Include="VkNet.AudioBypassService" Version="1.7.4" />
+        <PackageReference Include="VkNet" Version="1.72.0" />
     </ItemGroup>
 
 </Project>
