@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using DTLib.Extensions;
-
 namespace VkAudioDownloader.VkM3U8;
 
 public class M3U8Parser
@@ -78,7 +73,7 @@ public class M3U8Parser
         if(line.StartsWith("#EXTINF:"))
         {
             var duration = line.After(':').Before(',');
-            _fragmentDuration = float.Parse(duration, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat);
+            _fragmentDuration = duration.ToFloat();
         }
         else if (line.StartsWith("#EXT-X-KEY:METHOD="))
         {

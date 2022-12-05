@@ -1,4 +1,10 @@
-﻿using System;
+﻿global using System;
+global using System.Threading.Tasks;
+global using System.Collections.Generic;
+global using DTLib.Filesystem;
+global using DTLib.Extensions;
+global using DTLib.Logging.New;
+using DTLib.Logging.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using VkNet;
@@ -8,14 +14,9 @@ using VkNet.Model.RequestParams;
 using VkNet.Utils;
 using VkNet.Model.Attachments;
 using VkNet.AudioBypassService.Extensions;
-using DTLib.Logging.DependencyInjection;
-using DTLib.Logging.New;
-using DTLib.Filesystem;
 using VkAudioDownloader.VkM3U8;
 
 namespace VkAudioDownloader;
-
-
 
 public class VkClient : IDisposable
 {

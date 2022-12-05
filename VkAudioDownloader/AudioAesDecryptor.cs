@@ -1,9 +1,7 @@
-using System;
 using System.Security.Cryptography;
-using DTLib.Filesystem;
 using Stream = System.IO.Stream;
 
-namespace VkAudioDownloader.VkM3U8;
+namespace VkAudioDownloader;
 
 public class AudioAesDecryptor : IDisposable
 {

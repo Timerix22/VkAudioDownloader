@@ -4,7 +4,6 @@ using DTLib.Dtsod;
 using System.IO;
 using VkAudioDownloader;
 using DTLib.Logging.New;
-using VkAudioDownloader.VkM3U8;
 
 if(!File.Exists("config.dtsod"))
 {
@@ -18,6 +17,7 @@ var logger = new CompositeLogger(new DefaultLogFormat(true),
     new ConsoleLogger(), 
             new FileLogger("logs", "VkAudioDownloaer"));
 var _logger = new LoggerContext(logger, "main");
+_logger.LogDebug("DEBUG LOG ENABLED");
 
 try
 {
@@ -25,8 +25,8 @@ try
     AudioAesDecryptor.TestAes();
 #endif
     
+    _logger.LogInfo("initializing api...");
     var client = new VkClient(config, logger);
-    _logger.LogDebug("initializing api...");
     await client.ConnectAsync();
     
 // getting audio from vk

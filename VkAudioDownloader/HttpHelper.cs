@@ -1,10 +1,9 @@
-global using System.Threading.Tasks;
 using System.Net.Http;
-using DTLib.Filesystem;
+using VkAudioDownloader.VkM3U8;
 using Stream = System.IO.Stream;
 
 
-namespace VkAudioDownloader.VkM3U8;
+namespace VkAudioDownloader;
 
 public class HttpHelper : HttpClient
 {
