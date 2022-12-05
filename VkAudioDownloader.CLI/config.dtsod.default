@@ -1,3 +1,4 @@
 app_id: 0ul;
-login: " ";
-password: " ";
+login: "";
+password: "";
+ffmpeg_dir: "";

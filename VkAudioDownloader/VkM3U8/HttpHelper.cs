@@ -1,7 +1,7 @@
 global using System.Threading.Tasks;
-using System.IO;
 using System.Net.Http;
-using System.Text;
+using DTLib.Filesystem;
+using Stream = System.IO.Stream;
 
 
 namespace VkAudioDownloader.VkM3U8;
@@ -29,8 +29,8 @@ public class HttpHelper : HttpClient
         return Decryptor.DecryptStream(fragmentStream, key);
     }
 
-    public async Task DownloadAsync(HLSFragment fragment, string localDir) 
-        => await WriteStreamAsync(await GetStreamAsync(fragment), Path.Combine(localDir, fragment.Name));
+    public async Task DownloadAsync(HLSFragment fragment, string localDir) => 
+        await WriteStreamAsync(await GetStreamAsync(fragment), Path.Concat(localDir, fragment.Name));
 
     public async Task DownloadAsync(HLSPlaylist playlist, string localDir)
     {
@@ -38,7 +38,7 @@ public class HttpHelper : HttpClient
         {
             //TODO log file download progress
             await DownloadAsync(fragment, localDir);
-            playlist.CreateFragmentListFile(Path.Join(localDir, "playlist.txt"));
+            // playlist.CreateFragmentList();
         }
     }
 }

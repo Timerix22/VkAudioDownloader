@@ -1,18 +1,14 @@
-using System.IO;
-using System.Text;
-
 namespace VkAudioDownloader.VkM3U8;
 
 public class HLSPlaylist
 {
-
-    public HLSFragment[] Fragments { get; internal set; } 
+    public HLSFragment[] Fragments { get; } 
 
     /// content duration in seconds
-    public float Duration { get; internal set; }
+    public float Duration { get; }
     
     /// url before index.m3u8
-    public string BaseUrl { get; internal set; }
+    public string BaseUrl { get; }
     
     internal HLSPlaylist(HLSFragment[] fragments, float duration, string baseUrl)
     {
@@ -25,16 +21,4 @@ public class HLSPlaylist
         $"BaseUrl: {BaseUrl}\n" +
         $"Duration: {Duration}\n" +
         $"Fragments: HLSFragment[{Fragments.Length}]";
-
-    public void CreateFragmentListFile(string path)
-    {
-        using var playlistFile = File.Open(path, FileMode.Create);
-        foreach (var fragment in Fragments)
-        {
-            playlistFile.Write(Encoding.ASCII.GetBytes("file '"));
-            playlistFile.Write(Encoding.ASCII.GetBytes(fragment.Name));
-            playlistFile.WriteByte((byte)'\'');
-            playlistFile.WriteByte((byte)'\n');
-        }
-    }
 }

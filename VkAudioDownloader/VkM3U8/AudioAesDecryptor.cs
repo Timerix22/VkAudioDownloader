@@ -1,6 +1,7 @@
 using System;
-using System.IO;
 using System.Security.Cryptography;
+using DTLib.Filesystem;
+using Stream = System.IO.Stream;
 
 namespace VkAudioDownloader.VkM3U8;
 

@@ -6,45 +6,47 @@ using VkAudioDownloader;
 using DTLib.Logging.New;
 using VkAudioDownloader.VkM3U8;
 
-
 if(!File.Exists("config.dtsod"))
-    File.Copy("config.dtsod.default","config.dtsod");
+{
+    File.Copy("config.dtsod.default", "config.dtsod");
+    throw new Exception("No config detected, default created. Edit it!");
+}
+
+var config = VkClientConfig.FromDtsod(new DtsodV23(File.ReadAllText("config.dtsod")));
 
 var logger = new CompositeLogger(new DefaultLogFormat(true), 
     new ConsoleLogger(), 
             new FileLogger("logs", "VkAudioDownloaer"));
+var _logger = new LoggerContext(logger, "main");
+
+try
+{
 #if DEBUG
-logger.DebugLogEnabled = true;
+    AudioAesDecryptor.TestAes();
 #endif
-AudioAesDecryptor.TestAes();
-
-var client = new VkClient(
-    VkClientConfig.FromDtsod(new DtsodV23(File.ReadAllText("config.dtsod"))), 
-        logger);
-logger.Log("main", LogSeverity.Debug, "initializing api...");
-client.Connect();
+    
+    var client = new VkClient(config, logger);
+    _logger.LogDebug("initializing api...");
+    await client.ConnectAsync();
+    
 // getting audio from vk
-var http = new HttpHelper();
-var audio = client.FindAudio("гражданская оборона", 1).First();
-Console.WriteLine($"{audio.Title} -- {audio.Artist} [{TimeSpan.FromSeconds(audio.Duration)}]");
-var m3u8 = await http.GetStringAsync(audio.Url);
-Console.WriteLine("downloaded m3u8 playlist\n");
-// parsing index.m3u8
-var parser = new M3U8Parser();
-var playlist = parser.Parse(audio.Url, m3u8);
-Console.WriteLine(playlist);
-// downloading parts
-var frag = playlist.Fragments[3];
-var kurl =frag.EncryptionKeyUrl ?? throw new NullReferenceException();
-await http.DownloadAsync(kurl, "key.pub");
-if(Directory.Exists("playlist"))
-    Directory.Delete("playlist",true);
-Directory.CreateDirectory("playlist");
-await http.DownloadAsync(playlist, "playlist");
+    var audios = client.FindAudio("сталинский костюм").ToArray();
 
-// var decryptor = new AudioAesDecryptor();
-// string key = "cca42800074d7aeb";
-// using var encryptedFile = File.Open("encrypted.ts", FileMode.Open, FileAccess.ReadWrite);
-// using var cryptoStream = decryptor.DecryptStream(encryptedFile, key);
-// using var decryptedFile = File.Open("out.ts", FileMode.Create);
-// await cryptoStream.CopyToAsync(decryptedFile);
+    for (var i = 0; i < audios.Length; i++)
+    {
+        var a = audios[i];
+        Console.WriteLine($"[{i}] {a.AudioToString()}");
+    }
+
+    Console.Write("choose audio: ");
+    int ain = Convert.ToInt32(Console.ReadLine());
+    var audio = audios[ain];
+    Console.WriteLine($"selected \"{audio.Title}\" -- {audio.Artist} [{TimeSpan.FromSeconds(audio.Duration)}]");
+    // downloading parts
+    string downloadedFile = await client.DownloadAudioAsync(audio, "downloads");
+    _logger.LogInfo($"audio {audio.AudioToString()} downloaded to {downloadedFile}");
+}
+catch (Exception ex)
+{
+    _logger.LogException(ex);
+}
