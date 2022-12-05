@@ -7,6 +7,7 @@ global using DTLib.Logging.New;
 using DTLib.Logging.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using VkAudioDownloader.Helpers;
 using VkNet;
 using VkNet.Enums.Filters;
 using VkNet.Model;

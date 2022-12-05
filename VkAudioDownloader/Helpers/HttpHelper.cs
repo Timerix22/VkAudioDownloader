@@ -3,7 +3,7 @@ using VkAudioDownloader.VkM3U8;
 using Stream = System.IO.Stream;
 
 
-namespace VkAudioDownloader;
+namespace VkAudioDownloader.Helpers;
 
 public class HttpHelper : HttpClient
 {

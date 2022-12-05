@@ -3,7 +3,7 @@ using VkNet.Model.Attachments;
 
 namespace VkAudioDownloader;
 
-public static class AudioHelper
+public static class ExtensionMethods
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string AudioToString(this Audio a)

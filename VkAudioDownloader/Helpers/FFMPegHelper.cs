@@ -1,6 +1,6 @@
 using CliWrap;
 
-namespace VkAudioDownloader;
+namespace VkAudioDownloader.Helpers;
 
 public class FFMPegHelper
 {

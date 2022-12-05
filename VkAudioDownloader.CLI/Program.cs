@@ -22,7 +22,7 @@ _logger.LogDebug("DEBUG LOG ENABLED");
 try
 {
 #if DEBUG
-    AudioAesDecryptor.TestAes();
+    VkAudioDownloader.Helpers.AudioAesDecryptor.TestAes();
 #endif
     
     _logger.LogInfo("initializing api...");
