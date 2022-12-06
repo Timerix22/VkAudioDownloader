@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
@@ -9,7 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\VkAudioDownloader\VkAudioDownloader.csproj" />
+        <ProjectReference Include="..\VkAudioDownloader\VkAudioDownloader.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="config.dtsod.default">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 </Project>

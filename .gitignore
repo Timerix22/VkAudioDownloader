@@ -1,8 +1,23 @@
-bin/
-obj/
-/packages/
-riderModule.iml
-/_ReSharper.Caches/
+# Build results
+[Bb]in/
+.bin/
+[Dd]ebug/
+[Rr]elease/
+[Rr]eleases/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+nuget/
+
+# IDE files
+.vs/
+.vscode/
+.vshistory/
 .idea/
+.editorconfig
 *.user
 *.DotSettings
+
+#backups
+.old*/

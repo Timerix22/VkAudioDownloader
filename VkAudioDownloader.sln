@@ -4,19 +4,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VkAudioDownloader", "VkAudi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VkAudioDownloader.CLI", "VkAudioDownloader.CLI\VkAudioDownloader.CLI.csproj", "{5ECC83C5-B53F-4CA7-ABDE-E2ACE8F48FED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTLib", "DTLib\DTLib\DTLib.csproj", "{5A02279F-F246-4101-BAA7-71EC5FAF2CAF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTLib.Dtsod", "DTLib\DTLib.Dtsod\DTLib.Dtsod.csproj", "{F6FA6507-8A20-43F8-9D88-4CB2F049780D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sulution_items", "sulution_items", "{2CBCAE99-53A3-4ADE-A08B-5755EC471878}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		.gitmodules = .gitmodules
+		pack.sh = pack.sh
+		push_packages.sh = push_packages.sh
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTLib.Logging", "DTLib\DTLib.Logging\DTLib.Logging.csproj", "{A087B535-371A-4A7E-883E-B5B290567E9A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ben.Demystifier", "DTLib\DTLib.Logging\Ben.Demystifier\src\Ben.Demystifier\Ben.Demystifier.csproj", "{42AEDE44-8CE6-4561-B83E-AAE715B9C1DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,21 +25,5 @@ Global
 		{5ECC83C5-B53F-4CA7-ABDE-E2ACE8F48FED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5ECC83C5-B53F-4CA7-ABDE-E2ACE8F48FED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5ECC83C5-B53F-4CA7-ABDE-E2ACE8F48FED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A02279F-F246-4101-BAA7-71EC5FAF2CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A02279F-F246-4101-BAA7-71EC5FAF2CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A02279F-F246-4101-BAA7-71EC5FAF2CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A02279F-F246-4101-BAA7-71EC5FAF2CAF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F6FA6507-8A20-43F8-9D88-4CB2F049780D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6FA6507-8A20-43F8-9D88-4CB2F049780D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6FA6507-8A20-43F8-9D88-4CB2F049780D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6FA6507-8A20-43F8-9D88-4CB2F049780D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A087B535-371A-4A7E-883E-B5B290567E9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A087B535-371A-4A7E-883E-B5B290567E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A087B535-371A-4A7E-883E-B5B290567E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A087B535-371A-4A7E-883E-B5B290567E9A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42AEDE44-8CE6-4561-B83E-AAE715B9C1DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42AEDE44-8CE6-4561-B83E-AAE715B9C1DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42AEDE44-8CE6-4561-B83E-AAE715B9C1DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42AEDE44-8CE6-4561-B83E-AAE715B9C1DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,23 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
+        <!--package info-->
+        <PackageId>VkAudioDownloader</PackageId>
+        <Version>0.1.0</Version>
+        <Authors>Timerix</Authors>
+        <Description>Loggers with dependency injection</Description>
+        <RepositoryType>GIT</RepositoryType>
+        <RepositoryUrl>https://github.com/Timerix22/VkAudioDownloader</RepositoryUrl>
+        <Configuration>Release</Configuration>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <!--compilation properties-->
         <TargetFramework>net6.0</TargetFramework>
+        <DebugType>embedded</DebugType>
+        <!--language features-->
         <LangVersion>10</LangVersion>
-        <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <ImplicitUsings>disable</ImplicitUsings>
     </PropertyGroup>
 
+    <!--external dependencies-->
     <ItemGroup>
-        <ProjectReference Include="..\DTLib\DTLib.Dtsod\DTLib.Dtsod.csproj" />
-        <ProjectReference Include="..\DTLib\DTLib.Logging\DTLib.Logging.csproj" />
-        <ProjectReference Include="..\DTLib\DTLib\DTLib.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="CliWrap" Version="3.5.0" />
-      <PackageReference Include="VkNet.AudioBypassService" Version="1.7.4" />
+        <PackageReference Include="CliWrap" Version="3.5.0" />
+        <PackageReference Include="VkNet.AudioBypassService" Version="1.7.4" />
         <PackageReference Include="VkNet" Version="1.72.0" />
+        <PackageReference Include="DTLib.Dtsod" Version="1.0.1" />
+        <PackageReference Include="DTLib.Logging" Version="1.0.0" />
     </ItemGroup>
-
 </Project>
