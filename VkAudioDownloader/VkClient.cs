@@ -23,14 +23,14 @@ public class VkClient : IDisposable
 {
     public VkApi Api;
     public VkClientConfig Config;
-    private  DTLib.Logging.New.ILogger _logger;
+    private  DTLib.Logging.New.ContextLogger _logger;
     private HttpHelper _http;
     private FFMPegHelper _ffmpeg;
     
     public VkClient(VkClientConfig conf,  DTLib.Logging.New.ILogger logger)
     {
         Config = conf;
-        _logger = logger;
+        _logger = new ContextLogger(logger, nameof(VkClient));
         _http = new HttpHelper();
         _ffmpeg = new FFMPegHelper(logger,conf.FFMPegDir);
         var services = new ServiceCollection()
@@ -48,12 +48,12 @@ public class VkClient : IDisposable
         };
         if (Config.Token is not null)
         {
-            _logger.Log(nameof(VkClient),LogSeverity.Info,"authorizing by token");
+            _logger.LogInfo("authorizing by token");
             authParams.AccessToken = Config.Token;
         }
         else
         {
-            _logger.Log(nameof(VkClient),LogSeverity.Info,"authorizing by login and password");
+            _logger.LogInfo("authorizing by login and password");
             authParams.Login = Config.Login;
             authParams.Password = Config.Password;
         }
@@ -67,7 +67,7 @@ public class VkClient : IDisposable
             }
             catch (Exception aex)
             {
-                _logger.LogException(nameof(VkClient),aex);
+                _logger.LogError(aex);
             }
         }
     }
@@ -91,7 +91,7 @@ public class VkClient : IDisposable
         string outFile = Path.Concat(localDir, DTLib.Filesystem.Path.CorrectString($"{audio.Artist}-{audio.Title}.opus"));
         string fragmentDir = $"{outFile}_{DateTime.Now.Ticks}";
         if(File.Exists(outFile))
-            _logger.LogWarn(nameof(VkClient), $"file {outFile} already exists");
+            _logger.LogWarn( $"file {outFile} already exists");
         
         string m3u8 = await _http.GetStringAsync(audio.Url);
         var parser = new M3U8Parser();

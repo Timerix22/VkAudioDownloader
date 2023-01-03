@@ -2,8 +2,12 @@
 using System.Linq;
 using DTLib.Dtsod;
 using System.IO;
+using DTLib.Extensions;
 using VkAudioDownloader;
 using DTLib.Logging.New;
+
+Console.InputEncoding = StringConverter.UTF8;
+Console.OutputEncoding = StringConverter.UTF8;
 
 if(!File.Exists("config.dtsod"))
 {
@@ -16,7 +20,7 @@ var config = VkClientConfig.FromDtsod(new DtsodV23(File.ReadAllText("config.dtso
 var logger = new CompositeLogger(new DefaultLogFormat(true), 
     new ConsoleLogger(), 
             new FileLogger("logs", "VkAudioDownloaer"));
-var _logger = new LoggerContext(logger, "main");
+var _logger = new ContextLogger(logger, "Main");
 _logger.LogDebug("DEBUG LOG ENABLED");
 
 try
@@ -29,7 +33,7 @@ try
     var client = new VkClient(config, logger);
     await client.ConnectAsync();
     
-// getting audio from vk
+    // getting audio from vk
     var audios = client.FindAudio("сталинский костюм").ToArray();
 
     for (var i = 0; i < audios.Length; i++)
@@ -48,5 +52,5 @@ try
 }
 catch (Exception ex)
 {
-    _logger.LogException(ex);
+    _logger.LogError(ex);
 }

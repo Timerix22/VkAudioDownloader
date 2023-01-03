@@ -4,11 +4,11 @@ namespace VkAudioDownloader.Helpers;
 
 public class FFMPegHelper
 {
-    private LoggerContext _logger;
+    private ContextLogger _logger;
     private readonly string ffmpeg;    
     public FFMPegHelper(ILogger logger, string ffmpegDir)
     {
-        _logger = new LoggerContext(logger, nameof(FFMPegHelper));
+        _logger = new ContextLogger(logger, nameof(FFMPegHelper));
         ffmpeg=Path.Concat(ffmpegDir,"ffmpeg");
     }
     
