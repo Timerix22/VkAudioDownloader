@@ -61,8 +61,7 @@ public class FFMPegHelper
                     opusFile // output
                 })
                 // ffmpeg prints all log to stderr, because in stdout it ptints encoded file
-                .WithStandardErrorPipe(PipeTarget.ToDelegate(
-                    msg => _logger.LogWarn(msg)));
+                .WithStandardErrorPipe(PipeTarget.ToDelegate(StdErrHandle));
 
             tasks[i] = command.ExecuteAsync();
             output[i] = opusFile;
@@ -72,6 +71,13 @@ public class FFMPegHelper
         return output;
     }
 
+    protected void StdErrHandle(string msg)
+    {
+        if(msg.EndsWith("start time for stream 1 is not set in estimate_timings_from_pts"))
+            _logger.LogDebug(msg);
+        else _logger.LogWarn(msg);
+    }
+    
     public async Task Concat(string outfile, string fragmentListFile, string codec="libopus")
     {
         _logger.LogDebug($"{fragmentListFile} -> {outfile}");

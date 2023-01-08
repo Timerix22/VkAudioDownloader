@@ -5,7 +5,7 @@ namespace VkAudioDownloader;
 public class VkClientConfig
 {
     /// directory where ffmpeg and ffprobe binaries are stored
-    public string FFMPegDir;
+    public string FfmpegDir;
     /// vk app id from https://vk.com/apps?act=manage
     public ulong AppId;
     /// account password
@@ -16,27 +16,37 @@ public class VkClientConfig
     public string? Token;
 
 
-    public VkClientConfig(string ffmPegDir, ulong appId, string? token)
+    public VkClientConfig(string ffmpegDir, ulong appId, string? token)
     {
-        FFMPegDir = ffmPegDir;
+        FfmpegDir = ffmpegDir;
         AppId = appId;
         Token = token;
     }
 
-    public VkClientConfig(string ffmPegDir, ulong appId, string? password, string? login)
+    public VkClientConfig(string ffmpegDir, ulong appId, string? password, string? login)
     {
-        FFMPegDir = ffmPegDir;
+        FfmpegDir = ffmpegDir;
         AppId = appId;
         Password = password;
         Login = login;
     }
     
-    private VkClientConfig(string ffmPegDir, ulong appId)
+    private VkClientConfig(string ffmpegDir, ulong appId)
     {
-        FFMPegDir = ffmPegDir;
+        FfmpegDir = ffmpegDir;
         AppId = appId;
     }
-
+    
+    /// <summary>
+    /// {
+    ///     ffmpeg_dir: "";
+    ///     app_id: 0ul;
+    ///     token: "";
+    ///     #or
+    ///     login: "";
+    ///     password: "";
+    /// };
+    /// </summary>
     public static VkClientConfig FromDtsod(DtsodV23 dtsod)
     {
         var config = new VkClientConfig(dtsod["ffmpeg_dir"], dtsod["app_id"]);
@@ -56,7 +66,7 @@ public class VkClientConfig
             { "password", Password ?? null },
             { "login", Login ?? null },
             { "token", Token ?? null },
-            { "ffmpeg_dir", FFMPegDir}
+            { "ffmpeg_dir", FfmpegDir}
         };
 
 }

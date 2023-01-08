@@ -24,6 +24,6 @@
         <PackageReference Include="VkNet.AudioBypassService" Version="1.7.4" />
         <PackageReference Include="VkNet" Version="1.72.0" />
         <PackageReference Include="DTLib.Dtsod" Version="1.0.2" />
-        <PackageReference Include="DTLib.Logging" Version="1.0.5" />
+        <PackageReference Include="DTLib.Logging" Version="1.0.6" />
     </ItemGroup>
 </Project>

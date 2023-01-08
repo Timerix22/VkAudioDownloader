@@ -24,15 +24,15 @@ public class VkClient : IDisposable
     public VkApi Api;
     public VkClientConfig Config;
     private  DTLib.Logging.New.ContextLogger _logger;
-    private HttpHelper _http;
-    private FFMPegHelper _ffmpeg;
+    public HttpHelper Http;
+    public FFMPegHelper Ffmpeg;
     
     public VkClient(VkClientConfig conf,  DTLib.Logging.New.ILogger logger)
     {
         Config = conf;
         _logger = new ContextLogger(logger, nameof(VkClient));
-        _http = new HttpHelper();
-        _ffmpeg = new FFMPegHelper(logger,conf.FFMPegDir);
+        Http = new HttpHelper();
+        Ffmpeg = new FFMPegHelper(logger,conf.FfmpegDir);
         var services = new ServiceCollection()
             .Add(new LoggerService<VkApi>(logger))
             .AddAudioBypass();
@@ -44,7 +44,7 @@ public class VkClient : IDisposable
         var authParams = new ApiAuthParams
         {
             ApplicationId = Config.AppId,
-            Settings = Settings.Audio
+            Settings = Settings.Audio,
         };
         if (Config.Token is not null)
         {
@@ -79,10 +79,11 @@ public class VkClient : IDisposable
             Count = maxRezults,
         });
     
-    
+    ///<returns>file name</returns>
     public Task<string> DownloadAudioAsync(Audio audio, string localDir) => 
         DownloadAudioAsync(audio, localDir,TimeSpan.FromHours(1));
 
+    ///<returns>file name</returns>
     public async Task<string> DownloadAudioAsync(Audio audio, string localDir, TimeSpan durationLimit)
     {
         if (!audio.Url.ToString().StartsWith("http"))
@@ -93,16 +94,16 @@ public class VkClient : IDisposable
         if(File.Exists(outFile))
             _logger.LogWarn( $"file {outFile} already exists");
         
-        string m3u8 = await _http.GetStringAsync(audio.Url);
+        string m3u8 = await Http.GetStringAsync(audio.Url);
         var parser = new M3U8Parser();
         var hls = parser.Parse(audio.Url, m3u8);
         if (hls.Duration > durationLimit.TotalSeconds)
             throw new Exception($"duration limit <{durationLimit}> exceeded by track <{audio}> - <{hls.Duration}>");
         
-        await _http.DownloadAsync(hls, fragmentDir);
-        string[] opusFragments = await _ffmpeg.ToOpus(fragmentDir);
-        string listFile = _ffmpeg.CreateFragmentList(fragmentDir, opusFragments);
-        await _ffmpeg.Concat(outFile, listFile);
+        await Http.DownloadAsync(hls, fragmentDir);
+        string[] opusFragments = await Ffmpeg.ToOpus(fragmentDir);
+        string listFile = Ffmpeg.CreateFragmentList(fragmentDir, opusFragments);
+        await Ffmpeg.Concat(outFile, listFile);
         Directory.Delete(fragmentDir);
         
         return outFile;
@@ -113,7 +114,7 @@ public class VkClient : IDisposable
     {
         if (_disposed) return;
         Api.Dispose();
-        _http.Dispose();
+        Http.Dispose();
         _disposed = true;
     }
 }

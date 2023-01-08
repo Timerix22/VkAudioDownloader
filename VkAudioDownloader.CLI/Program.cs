@@ -5,9 +5,12 @@ using System.IO;
 using DTLib.Extensions;
 using VkAudioDownloader;
 using DTLib.Logging.New;
+using VkAudioDownloader.CLI;
 
 Console.InputEncoding = StringConverter.UTF8;
 Console.OutputEncoding = StringConverter.UTF8;
+
+LaunchArgumentParser argParser = new LaunchArgumentParser();
 
 if(!File.Exists("config.dtsod"))
 {
@@ -19,38 +22,48 @@ var config = VkClientConfig.FromDtsod(new DtsodV23(File.ReadAllText("config.dtso
 
 var logger = new CompositeLogger(new DefaultLogFormat(true), 
     new ConsoleLogger(), 
-            new FileLogger("logs", "VkAudioDownloaer"));
-var _logger = new ContextLogger(logger, "Main");
-_logger.LogDebug("DEBUG LOG ENABLED");
+            new FileLogger("logs", "VkAudioDownloaer"),
+            new FileLogger("logs", "VkAudioDownloaer_debug") { DebugLogEnabled = true});
+var mainLoggerContext = new ContextLogger(logger, "Main");
+mainLoggerContext.LogDebug("DEBUG LOG ENABLED");
 
 try
 {
 #if DEBUG
+    // checking correctness of my aes-128 decryptor on current platform
     VkAudioDownloader.Helpers.AudioAesDecryptor.TestAes();
 #endif
-    
-    _logger.LogInfo("initializing api...");
+
+    mainLoggerContext.LogInfo("initializing api...");
     var client = new VkClient(config, logger);
     await client.ConnectAsync();
     
-    // getting audio from vk
-    var audios = client.FindAudio("сталинский костюм").ToArray();
-
-    for (var i = 0; i < audios.Length; i++)
+    argParser.Add(new LaunchArgument(new []{"s", "search"}, "search audio on vk.com", SearchAudio, "query"));
+    argParser.ParseAndHandle(args);
+    
+    void SearchAudio(string query)
     {
-        var a = audios[i];
-        Console.WriteLine($"[{i}] {a.AudioToString()}");
+        var audios = client.FindAudio(query).ToArray();
+        for (var i = 0; i < audios.Length; i++)
+        {
+            var a = audios[i];
+            Console.WriteLine($"[{i}] {a.AudioToString()}");
+        }
+        Console.Write("choose audio: ");
+        int ain = Convert.ToInt32(Console.ReadLine());
+        var audio = audios[ain];
+        Console.WriteLine($"selected {audio.AudioToString()}");
+    
+        string downloadedFile = client.DownloadAudioAsync(audio, "downloads").GetAwaiter().GetResult();
+        mainLoggerContext.LogInfo($"audio {audio.AudioToString()} downloaded to {downloadedFile}");
     }
-
-    Console.Write("choose audio: ");
-    int ain = Convert.ToInt32(Console.ReadLine());
-    var audio = audios[ain];
-    Console.WriteLine($"selected \"{audio.Title}\" -- {audio.Artist} [{TimeSpan.FromSeconds(audio.Duration)}]");
-    // downloading parts
-    string downloadedFile = await client.DownloadAudioAsync(audio, "downloads");
-    _logger.LogInfo($"audio {audio.AudioToString()} downloaded to {downloadedFile}");
+}
+catch (LaunchArgumentParser.ExitAfterHelpException)
+{
+    
 }
 catch (Exception ex)
 {
-    _logger.LogError(ex);
+    mainLoggerContext.LogError(ex);
 }
+Console.ResetColor();
