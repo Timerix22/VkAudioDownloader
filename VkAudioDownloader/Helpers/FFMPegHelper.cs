@@ -1,24 +1,25 @@
 using CliWrap;
+using DTLib.Logging;
 
 namespace VkAudioDownloader.Helpers;
 
 public class FFMPegHelper
 {
     private ContextLogger _logger;
-    private readonly string ffmpeg;    
-    public FFMPegHelper(ILogger logger, string ffmpegDir)
+    private readonly IOPath ffmpeg_exe;    
+    public FFMPegHelper(ILogger logger, IOPath ffmpegDir)
     {
-        _logger = new ContextLogger(logger, nameof(FFMPegHelper));
-        ffmpeg=Path.Concat(ffmpegDir,"ffmpeg");
+        _logger = new ContextLogger(nameof(FFMPegHelper), logger);
+        ffmpeg_exe=Path.Concat(ffmpegDir,"ffmpeg");
     }
     
     /// <summary>creates fragments list for ffmppeg concat</summary>
     /// <param name="fragmentsDir">there file list.txt will be created</param>
     /// <param name="fragments">audio files in fragmentsDir (with or without dir in path)</param>
-    /// <returns></returns>
-    public string CreateFragmentList(string fragmentsDir, string[] fragments)
+    /// <returns>path to list.txt file</returns>
+    public IOPath CreateFragmentList(IOPath fragmentsDir, IOPath[] fragments)
     {
-        string listFile = Path.Concat(fragmentsDir, "list.txt");
+        IOPath listFile = Path.Concat(fragmentsDir, "list.txt");
         using var playlistFile = File.OpenWrite(listFile);
         for (var i = 0; i < fragments.Length; i++)
         {
@@ -33,7 +34,7 @@ public class FFMPegHelper
     /// <summary>converts ts files in directory to opus</summary>
     /// <param name="localDir">directory with ts fragment files</param>
     /// <returns>paths to created opus files</returns>
-    public Task<string[]> ToOpus(string localDir) => 
+    public Task<IOPath[]> ToOpus(IOPath localDir) => 
         ToOpus(Directory.GetFiles(localDir, "*.ts"));
 
     /// <summary>
@@ -41,24 +42,24 @@ public class FFMPegHelper
     /// </summary>
     /// <param name="fragments">ts fragment files</param>
     /// <returns>paths to created opus files</returns>
-    public async Task<string[]> ToOpus(string[] fragments)
+    public async Task<IOPath[]> ToOpus(IOPath[] fragments)
     {
-        string[] output = new string[fragments.Length];
+        IOPath[] output = new IOPath[fragments.Length];
         var tasks = new Task<CommandResult>[fragments.Length];
         
         for (var i = 0; i < fragments.Length; i++)
         {
-            string tsFile = fragments[i];
-            string opusFile = tsFile.Replace(".ts",".opus");
+            IOPath tsFile = fragments[i];
+            IOPath opusFile = tsFile.Replace(".ts",".opus");
             _logger.LogDebug($"{tsFile} -> {opusFile}");
-            var command = Cli.Wrap(ffmpeg).WithArguments(new[]
+            var command = Cli.Wrap(ffmpeg_exe.Str).WithArguments(new[]
                 {
-                    "-i", tsFile, // input
+                    "-i", tsFile.Str, // input
                     "-loglevel", "warning", "-hide_banner", "-nostats", // print only warnings and errors
                     "-map", "0:0", // select first audio track (sometimes there are blank buggy second thack) 
                     "-filter:a", "asetpts=PTS-STARTPTS", // fixes pts
                     "-c", "libopus", "-b:a", "96k", // encoding params
-                    opusFile // output
+                    opusFile.Str // output
                 })
                 // ffmpeg prints all log to stderr, because in stdout it ptints encoded file
                 .WithStandardErrorPipe(PipeTarget.ToDelegate(StdErrHandle));
@@ -78,17 +79,17 @@ public class FFMPegHelper
         else _logger.LogWarn(msg);
     }
     
-    public async Task Concat(string outfile, string fragmentListFile, string codec="libopus")
+    public async Task Concat(IOPath outfile, IOPath fragmentListFile, string codec="libopus")
     {
         _logger.LogDebug($"{fragmentListFile} -> {outfile}");
-        var command = Cli.Wrap(ffmpeg).WithArguments(new[]
+        var command = Cli.Wrap(ffmpeg_exe.Str).WithArguments(new[]
             {
                 "-f", "concat", // mode
-                "-i", fragmentListFile, // input list
+                "-i", fragmentListFile.Str, // input list
                 "-loglevel", "warning", "-hide_banner", "-nostats", // print only warnings and errors
                 "-filter:a", "asetpts=PTS-STARTPTS", // fixes pts
                 "-c", codec, "-b:a", "96k", // encoding params
-                outfile, "-y" // output override
+                outfile.Str, "-y" // output override
             })
             // ffmpeg prints all log to stderr, because in stdout it ptints encoded file
             .WithStandardErrorPipe(PipeTarget.ToDelegate(

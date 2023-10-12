@@ -29,7 +29,7 @@ public class HttpHelper : HttpClient
     }
 
     public async Task DownloadAsync(HLSFragment fragment, string localDir) => 
-        await WriteStreamAsync(await GetStreamAsync(fragment), Path.Concat(localDir, fragment.Name));
+        await WriteStreamAsync(await GetStreamAsync(fragment), Path.Concat(localDir, fragment.Name).ToString()!);
 
     public async Task DownloadAsync(HLSPlaylist playlist, string localDir)
     {

@@ -3,7 +3,7 @@ global using System.Threading.Tasks;
 global using System.Collections.Generic;
 global using DTLib.Filesystem;
 global using DTLib.Extensions;
-global using DTLib.Logging.New;
+using DTLib.Logging;
 using DTLib.Logging.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -11,9 +11,7 @@ using VkAudioDownloader.Helpers;
 using VkNet;
 using VkNet.Enums.Filters;
 using VkNet.Model;
-using VkNet.Model.RequestParams;
 using VkNet.Utils;
-using VkNet.Model.Attachments;
 using VkNet.AudioBypassService.Extensions;
 using VkAudioDownloader.VkM3U8;
 
@@ -23,16 +21,16 @@ public class VkClient : IDisposable
 {
     public VkApi Api;
     public VkClientConfig Config;
-    private  DTLib.Logging.New.ContextLogger _logger;
+    private ContextLogger _logger;
     public HttpHelper Http;
     public FFMPegHelper Ffmpeg;
     
-    public VkClient(VkClientConfig conf,  DTLib.Logging.New.ILogger logger)
+    public VkClient(VkClientConfig conf,  DTLib.Logging.ILogger logger)
     {
         Config = conf;
-        _logger = new ContextLogger(logger, nameof(VkClient));
+        _logger = new ContextLogger(nameof(VkClient), logger);
         Http = new HttpHelper();
-        Ffmpeg = new FFMPegHelper(logger,conf.FfmpegDir);
+        Ffmpeg = new FFMPegHelper(logger, conf.FfmpegDir);
         var services = new ServiceCollection()
             .Add(new LoggerService<VkApi>(logger))
             .AddAudioBypass();
@@ -80,16 +78,16 @@ public class VkClient : IDisposable
         });
     
     ///<returns>file name</returns>
-    public Task<string> DownloadAudioAsync(Audio audio, string localDir) => 
+    public Task<IOPath> DownloadAudioAsync(Audio audio, string localDir) => 
         DownloadAudioAsync(audio, localDir,TimeSpan.FromHours(1));
 
     ///<returns>file name</returns>
-    public async Task<string> DownloadAudioAsync(Audio audio, string localDir, TimeSpan durationLimit)
+    public async Task<IOPath> DownloadAudioAsync(Audio audio, string localDir, TimeSpan durationLimit)
     {
         if (!audio.Url.ToString().StartsWith("http"))
             throw new Exception($"incorrect audio url: {audio.Url}");
 
-        string outFile = Path.Concat(localDir, DTLib.Filesystem.Path.CorrectString($"{audio.Artist}-{audio.Title}.opus"));
+        IOPath outFile = Path.Concat(localDir, DTLib.Filesystem.Path.ReplaceRestrictedChars($"{audio.Artist}-{audio.Title}.opus"));
         string fragmentDir = $"{outFile}_{DateTime.Now.Ticks}";
         if(File.Exists(outFile))
             _logger.LogWarn( $"file {outFile} already exists");
@@ -101,8 +99,8 @@ public class VkClient : IDisposable
             throw new Exception($"duration limit <{durationLimit}> exceeded by track <{audio}> - <{hls.Duration}>");
         
         await Http.DownloadAsync(hls, fragmentDir);
-        string[] opusFragments = await Ffmpeg.ToOpus(fragmentDir);
-        string listFile = Ffmpeg.CreateFragmentList(fragmentDir, opusFragments);
+        var opusFragments = await Ffmpeg.ToOpus(fragmentDir);
+        IOPath listFile = Ffmpeg.CreateFragmentList(fragmentDir, opusFragments);
         await Ffmpeg.Concat(outFile, listFile);
         Directory.Delete(fragmentDir);
         

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using DTLib.Dtsod;
-using System.IO;
+using DTLib.Console;
 using DTLib.Extensions;
+using DTLib.Filesystem;
+using DTLib.Logging;
 using VkAudioDownloader;
-using DTLib.Logging.New;
-using VkAudioDownloader.CLI;
 
 Console.InputEncoding = StringConverter.UTF8;
 Console.OutputEncoding = StringConverter.UTF8;
@@ -14,7 +14,7 @@ LaunchArgumentParser argParser = new LaunchArgumentParser();
 
 if(!File.Exists("config.dtsod"))
 {
-    File.Copy("config.dtsod.default", "config.dtsod");
+    File.Copy("config.dtsod.default", "config.dtsod", true);
     throw new Exception("No config detected, default created. Edit it!");
 }
 
@@ -24,7 +24,7 @@ var logger = new CompositeLogger(new DefaultLogFormat(true),
     new ConsoleLogger(), 
             new FileLogger("logs", "VkAudioDownloaer"),
             new FileLogger("logs", "VkAudioDownloaer_debug") { DebugLogEnabled = true});
-var mainLoggerContext = new ContextLogger(logger, "Main");
+var mainLoggerContext = new ContextLogger("Main", logger);
 mainLoggerContext.LogDebug("DEBUG LOG ENABLED");
 
 try
@@ -54,7 +54,7 @@ try
         var audio = audios[ain];
         Console.WriteLine($"selected {audio.AudioToString()}");
     
-        string downloadedFile = client.DownloadAudioAsync(audio, "downloads").GetAwaiter().GetResult();
+        IOPath downloadedFile = client.DownloadAudioAsync(audio, "downloads").GetAwaiter().GetResult();
         mainLoggerContext.LogInfo($"audio {audio.AudioToString()} downloaded to {downloadedFile}");
     }
 }

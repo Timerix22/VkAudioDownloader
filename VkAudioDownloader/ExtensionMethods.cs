@@ -1,5 +1,5 @@
 using System.Runtime.CompilerServices;
-using VkNet.Model.Attachments;
+using VkNet.Model;
 
 namespace VkAudioDownloader;
 
